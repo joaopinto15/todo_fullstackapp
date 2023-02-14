@@ -5,10 +5,19 @@
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height='40'/>](https://nodejs.org/en/)
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" height='40' />](https://www.postgresql.org/)
                               
+### Front-end dependencies
+  axios
+  react-icons
+  
+
+### Back-end dependencies
+  express
+  prisma
+  cors
 
 ## Website
 
-This project is being host in a raspberry pi 4. You can acess the website in this link :[👍]()
+This project is being host in a raspberry pi 4. You can acess the website in this link :[🕸️](joaopinto.zapto.org)
 
 ### Used scripts 
 ```bash
