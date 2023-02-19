@@ -1,47 +1,96 @@
-import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
-import "./App.css";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState } from 'react'
+
+// server comunication
+import axios from 'axios';
+// Style 
+import './App.css'
+// custom components
+import CustomForm from './components/CustomForm'
+import EditForm from './components/EditForm'
+import TaskList from './components/TaskList'
 
 function App() {
-    const Todos = ({ todos }) => {
-        return (
-            <div className="todos">
-                {todos.map((todo) => {
-                    return (
-                        <div className="todo">
-                            <button
-                                onClick={() => modifyStatusTodo(todo)}
-                                className="checkbox"
-                                style={{ backgroundColor: todo.status ? "#A879E6" : "white" }}
-                            ></button>
-                            <p>{todo.name}</p>
-                            <button onClick={() => handleWithEditButtonClick(todo)}>
-                                <AiOutlineEdit size={20} color={"#64697b"}></AiOutlineEdit>
-                            </button>
-                            <button onClick={() => deleteTodo(todo)}>
-                                <AiOutlineDelete size={20} color={"#64697b"}></AiOutlineDelete>
-                            </button>
-                        </div>
-                    );
-                })}
-            </div>
-        );
-    };
+    const [tasks, setTasks] = useState([]);
+    const [previousFocusEl, setPreviousFocusEl] = useState(null);
+    const [editedTask, setEditedTask] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
 
-    async function handleWithNewButton() {
-        console.log("fasfas");
-        setInputVisility(!inputVisbility);
+    const addTask = (task) => {
+        setTasks(prevState => [...prevState, task])
     }
-    async function handleWithEditButtonClick(todo) {
-        setSelectedTodo(todo);
-        setInputVisility(true);
+
+    const deleteTask = (id) => {
+        setTasks(prevState => prevState.filter(t => t.id !== id));
     }
+
+    const toggleTask = (id) => {
+        setTasks(prevState => prevState.map(t => (
+            t.id === id
+                ? { ...t, checked: !t.checked }
+                : t
+        )))
+    }
+
+    const updateTask = (task) => {
+        setTasks(prevState => prevState.map(t => (
+            t.id === task.id
+                ? { ...t, name: task.name }
+                : t
+        )))
+        closeEditMode();
+    }
+
+    const closeEditMode = () => {
+        setIsEditing(false);
+        previousFocusEl.focus();
+    }
+
+    const enterEditMode = (task) => {
+        setEditedTask(task);
+        setIsEditing(true);
+        setPreviousFocusEl(document.activeElement);
+    }
+
+    return (
+        <div className="container">
+            <header>
+                <h1>My Task List</h1>
+            </header>
+            {
+                isEditing && (
+                    <EditForm
+                        editedTask={editedTask}
+                        updateTask={updateTask}
+                        closeEditMode={closeEditMode}
+                    />
+                )
+            }
+            <CustomForm addTask={addTask} />
+            {tasks && (
+                <TaskList
+                    tasks={tasks}
+                    deleteTask={deleteTask}
+                    toggleTask={toggleTask}
+                    enterEditMode={enterEditMode}
+                />
+            )}
+        </div>
+    )
+}
+
+export default App
+
+
+/*
+// old code
+
+    //The getTodos function retrieves the list of tasks from the server and updates the state of the application
     async function getTodos() {
         const response = await axios.get("http://localhost:5000/todos");
         setTodos(response.data);
         console.log(response.data);
     }
+    //The editTodo function updates the name of the selected task on the server and updates the state of the application
     async function editTodo() {
         const response = await axios.put("http://localhost:5000/todos", {
             id: selectedTodo.id,
@@ -52,12 +101,14 @@ function App() {
         getTodos();
         setInputValue("");
     }
+    //The deleteTodo function deletes a task from the server and updates the state of the application
     async function deleteTodo(todo) {
         const response = await axios.delete(
             `http://localhost:5000/todos/${todo.id}`
         );
         getTodos();
     }
+    //The modifyStatusTodo function updates the status of a task on the server and updates the state of the application.
     async function modifyStatusTodo(todo) {
         const response = await axios.put("http://localhost:5000/todos", {
             id: todo.id,
@@ -65,7 +116,7 @@ function App() {
         });
         getTodos();
     }
-
+    //The createTodo function creates a new task on the server and updates the state of the application
     async function createTodo() {
         const response = await axios.post("http://localhost:5000/todos", {
             name: inputValue,
@@ -74,46 +125,4 @@ function App() {
         setInputVisility(!inputVisbility);
         setInputValue("");
     }
-
-    const [todos, setTodos] = useState([]);
-    const [inputValue, setInputValue] = useState("");
-    const [inputVisbility, setInputVisility] = useState(false);
-    const [selectedTodo, setSelectedTodo] = useState();
-
-    useEffect(() => {
-        getTodos();
-    }, []);
-
-    return (
-        <div className="App">
-            <header className="container">
-                <div className="header">
-                    <h1>Dont be lazzy</h1>
-                </div>
-                <Todos todos={todos}></Todos>
-                <input
-                    value={inputValue}
-                    style={{ display: inputVisbility ? "block" : "none" }}
-                    onChange={(event) => {
-                        setInputValue(event.target.value);
-                    }}
-                    className="inputName"
-                ></input>
-                <button
-                    onClick={
-                        inputVisbility
-                            ? selectedTodo
-                                ? editTodo
-                                : createTodo
-                            : handleWithNewButton
-                    }
-                    className="newTaskButton"
-                >
-                    {inputVisbility ? "Confirm" : "+ New task"}
-                </button>
-            </header>
-        </div>
-    );
-}
-
-export default App;
+*/
