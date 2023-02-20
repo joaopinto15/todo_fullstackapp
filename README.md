@@ -3,12 +3,11 @@
 ### 🛠Tools
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original-wordmark.svg" height='40'/>](https://reactjs.org/)
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height='40'/>](https://nodejs.org/en/)
-[<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" height='40' />](https://www.postgresql.org/)
+[<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" height='40' />](https://www.sqlite.org/index.html)
                               
 ### Front-end dependencies
   axios
-  react-icons
-  
+ 
 
 ### Back-end dependencies
   express

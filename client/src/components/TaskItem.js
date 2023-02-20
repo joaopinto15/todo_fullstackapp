@@ -13,7 +13,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
 
     const handleCheckboxChange = (e) => {
         setIsChecked(!isChecked);
-        toggleTask(task.id);
+        toggleTask(task);
     }
 
     return (
@@ -49,7 +49,7 @@ const TaskItem = ({ task, deleteTask, toggleTask, enterEditMode }) => {
                 <button
                     className={`btn ${styles.delete}`}
                     aria-label={`Delete ${task.name} Task`}
-                    onClick={() => deleteTask(task.id)}
+                    onClick={() => deleteTask(task)}
                 >
                     <TrashIcon width={24} height={24} />
                 </button>

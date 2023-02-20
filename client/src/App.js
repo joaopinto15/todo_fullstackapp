@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // server comunication
 import axios from 'axios';
@@ -15,31 +15,27 @@ function App() {
     const [editedTask, setEditedTask] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
+    // Get the list of todos from an API and render them in the component.
+    useEffect(() => {
+        getTodos();
+    })
+    /*********************
+     * Interface Display *
+     *********************/
     const addTask = (task) => {
-        setTasks(prevState => [...prevState, task])
+        createTodo(task.name)
+        
     }
-
-    const deleteTask = (id) => {
-        setTasks(prevState => prevState.filter(t => t.id !== id));
+    const deleteTask = (task) => {
+        deleteTodo(task)
     }
-
-    const toggleTask = (id) => {
-        setTasks(prevState => prevState.map(t => (
-            t.id === id
-                ? { ...t, checked: !t.checked }
-                : t
-        )))
+    const toggleTask = (task) => {
+        modifyStatusTodo(task);
     }
-
     const updateTask = (task) => {
-        setTasks(prevState => prevState.map(t => (
-            t.id === task.id
-                ? { ...t, name: task.name }
-                : t
-        )))
+        editTodo(task)
         closeEditMode();
     }
-
     const closeEditMode = () => {
         setIsEditing(false);
         previousFocusEl.focus();
@@ -50,7 +46,45 @@ function App() {
         setIsEditing(true);
         setPreviousFocusEl(document.activeElement);
     }
+    /*********************
+     * Server Connection *
+     *********************/
 
+    //The getTodos function retrieves the list of tasks from the server and updates the state of the application
+    async function getTodos() {
+        const response = await axios.get("http://localhost:5000/todos");
+        setTasks(response.data);
+    }
+    //The createTodo function creates a new task on the server and updates the state of the application
+    async function createTodo(todo) {
+        const response = await axios.post("http://localhost:5000/todos", {
+            name: todo,
+        });
+        getTodos();
+    }
+    //The deleteTodo function deletes a task from the server and updates the state of the application
+    async function deleteTodo(todo) {
+        const response = await axios.delete(
+            `http://localhost:5000/todos/${todo.id}`
+        );
+       getTodos();
+    }
+    //The modifyStatusTodo function updates the status of a task on the server and updates the state of the application.
+    async function modifyStatusTodo(todo) {
+        const response = await axios.put("http://localhost:5000/todos", {
+            id: todo.id,
+            status: !todo.status,
+        });
+        getTodos();
+    }
+    //The editTodo function updates the name of the selected task on the server and updates the state of the application
+    async function editTodo(task) {
+        const response = await axios.put("http://localhost:5000/todos", {
+            id: task.id,
+            name: task.name,
+        });
+       getTodos();
+    }
     return (
         <div className="container">
             <header>
