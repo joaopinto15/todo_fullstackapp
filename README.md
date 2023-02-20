@@ -22,3 +22,12 @@ This project is being host in a raspberry pi 4. You can acess the website in thi
 ```bash
 npx create-react-app client
 ```
+```bash
+npx prisma studio
+```
+```bash
+npm run start
+```
+```bash
+npm run dev
+```
