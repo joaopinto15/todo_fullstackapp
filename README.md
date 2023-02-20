@@ -18,9 +18,9 @@
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" height='40' />](https://www.sqlite.org/index.html)
                               
 
-## Website
+### Website
 
-This project is being host in a raspberry pi 4. You can acess the website in this link :[🕸️](http://joaopinto.zapto.org)
+__This project is being host in a raspberry pi 4. You can acess the website in this link :__[🕸️](http://joaopinto.zapto.org)
 
 ### Used scripts 
 ```bash
