@@ -1,76 +1,94 @@
+// Express
 const express = require("express");
-
-const allTodos = [{ nome: "aaaa", status: false }];
 const todosRoutes = express.Router();
-const { PrismaClient } = require("@prisma/client");
 const { response } = require("express");
-
-const prisma = new PrismaClient();
-
-// C
-todosRoutes.post("/todos", async (request, response) => {
-    const { name } = request.body;
-    const todo = await prisma.todo.create({
-        data: {
-            name,
-        },
-    });
-
-    return response.status(201).json(todo);
+// SQLite
+const sqlite3 = require('sqlite3').verbose();
+let db = new sqlite3.Database('./database/database.db', (err) => {
+    // Check if the connection is 200
+    if (err) {
+        return console.error(err.message);
+    }
+    console.log('Connected to the in-memory SQlite database.');
 });
-// R
-todosRoutes.get("/todos", async (request, response) => {
-    const todos = await prisma.todo.findMany();
-    return response.status(200).json(todos);
-});
-// U
 
-todosRoutes.put("/todos", async (request, response) => {
-    const { name, id, status } = request.body;
-
-    if (!id) {
-        return response.status(400).json("Id is mandatory");
-    }
-
-    const todoAlreadyExist = await prisma.todo.findUnique({ where: { id } });
-
-    if (!todoAlreadyExist) {
-        return response.status(404).json("Todo not exist");
-    }
-
-    const todo = await prisma.todo.update({
-        where: {
-            id,
+// CREATE
+todosRoutes.post('/todos', (req, res) => {
+    const { name } = req.body;
+    const status = false; // Default status is false
+    db.run(
+        // Insert name and status to db
+        'INSERT INTO Todo (name, status) VALUES (?, ?)',
+        [name, status],
+        function (err) {
+            if (err) {
+                console.log(err.message);
+                return res.status(500).send('Internal server error');
+            }
+            const id = this.lastID;
+            db.get('SELECT * FROM Todo WHERE id = ?', [id], (err, row) => {
+                if (err) {
+                    console.log(err.message);
+                    return res.status(500).send('Internal server error');
+                }
+                return res.status(201).json(row);
+            });
         },
-        data: {
-            name,
-            status,
-        },
-    });
-
-    return response.status(200).json(todo);
+    );
 });
-// D
-todosRoutes.delete("/todos/:id", async (request, response) => {
-    const { id } = request.params;
 
-    const intId = parseInt(id);
-
-    if (!intId) {
-        return response.status(400).json("Id is mandatory");
-    }
-
-    const todoAlreadyExist = await prisma.todo.findUnique({
-        where: { id: intId },
+// READ
+todosRoutes.get('/todos', (req, res) => {
+    db.all('SELECT * FROM Todo', (err, rows) => {
+        if (err) {
+            console.log(err.message);
+            return res.status(500).send('Internal server error');
+        }
+        return res.status(200).json(rows);
     });
+});
 
-    if (!todoAlreadyExist) {
-        return response.status(404).json("Todo not exist");
-    }
+// UPDATE
+todosRoutes.put('/todos/:id', (req, res) => {
+    const { name, status } = req.body;
+    const { id } = req.params;
 
-    await prisma.todo.delete({ where: { id: intId } });
+    db.run(
+        'UPDATE Todo SET name = ?, status = ? WHERE id = ?',
+        [name, status, id],
+        function (err) {
+            if (err) {
+                console.log(err.message);
+                return res.status(500).send('Internal server error');
+            }
+            if (this.changes === 0) {
+                return res.status(404).send('Todo not found');
+            }
+            db.get('SELECT * FROM Todo WHERE id = ?', [id], (err, row) => {
+                if (err) {
+                    console.log(err.message);
+                    return res.status(500).send('Internal server error');
+                }
+                return res.status(200).json(row);
+            });
+        },
+    );
+});
 
-    return response.status(200).send();
+// DELETE
+todosRoutes.delete('/todos/:id', (req, res) => {
+    const { id } = req.params;
+
+    db.run('DELETE FROM Todo WHERE id = ?', [id], function (err) {
+        if (err) {
+            console.log(err.message);
+            return res.status(500).send('Internal server error');
+        }
+        if (this.changes === 0) {
+            return res.status(404).send('Todo not found');
+        }
+        return res.status(200).send();
+    });
 });
 
 module.exports = todosRoutes;

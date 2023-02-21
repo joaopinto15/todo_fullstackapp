@@ -10,15 +10,15 @@ import EditForm from './components/EditForm'
 import TaskList from './components/TaskList'
 
 function App() {
-    const [tasks, setTasks] = useState([]);
+    const [tasks, setTasks] = useState(() => {
+        getTodos();
+    });
     const [previousFocusEl, setPreviousFocusEl] = useState(null);
     const [editedTask, setEditedTask] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
     // Get the list of todos from an API and render them in the component.
-    useEffect(() => {
-        getTodos();
-    })
+  
     /*********************
      * Interface Display *
      *********************/
@@ -71,16 +71,18 @@ function App() {
     }
     //The modifyStatusTodo function updates the status of a task on the server and updates the state of the application.
     async function modifyStatusTodo(todo) {
-        const response = await axios.put("http://localhost:5000/todos", {
+        const response = await axios.put(`http://localhost:5000/todos/${todo.id}`, {
             id: todo.id,
+            name: todo.name,
             status: !todo.status,
         });
         getTodos();
     }
     //The editTodo function updates the name of the selected task on the server and updates the state of the application
     async function editTodo(task) {
-        const response = await axios.put("http://localhost:5000/todos", {
+        const response = await axios.put(`http://localhost:5000/todos/${task.id}`, {
             id: task.id,
+            status: task.status,
             name: task.name,
         });
        getTodos();
@@ -113,50 +115,3 @@ function App() {
 }
 
 export default App
-
-
-/*
-// old code
-
-    //The getTodos function retrieves the list of tasks from the server and updates the state of the application
-    async function getTodos() {
-        const response = await axios.get("http://localhost:5000/todos");
-        setTodos(response.data);
-        console.log(response.data);
-    }
-    //The editTodo function updates the name of the selected task on the server and updates the state of the application
-    async function editTodo() {
-        const response = await axios.put("http://localhost:5000/todos", {
-            id: selectedTodo.id,
-            name: inputValue,
-        });
-        setSelectedTodo();
-        setInputVisility(false);
-        getTodos();
-        setInputValue("");
-    }
-    //The deleteTodo function deletes a task from the server and updates the state of the application
-    async function deleteTodo(todo) {
-        const response = await axios.delete(
-            `http://localhost:5000/todos/${todo.id}`
-        );
-        getTodos();
-    }
-    //The modifyStatusTodo function updates the status of a task on the server and updates the state of the application.
-    async function modifyStatusTodo(todo) {
-        const response = await axios.put("http://localhost:5000/todos", {
-            id: todo.id,
-            status: !todo.status,
-        });
-        getTodos();
-    }
-    //The createTodo function creates a new task on the server and updates the state of the application
-    async function createTodo() {
-        const response = await axios.post("http://localhost:5000/todos", {
-            name: inputValue,
-        });
-        getTodos();
-        setInputVisility(!inputVisbility);
-        setInputValue("");
-    }
-*/
