@@ -52,12 +52,12 @@ function App() {
 
     //The getTodos function retrieves the list of tasks from the server and updates the state of the application
     async function getTodos() {
-        const response = await axios.get("http://joaopinto.zapto.org/todos");
+        const response = await axios.get("http://localhost:5000/todos");
         setTasks(response.data);
     }
     //The createTodo function creates a new task on the server and updates the state of the application
     async function createTodo(todo) {
-        const response = await axios.post("http://joaopinto.zapto.org/todos", {
+        const response = await axios.post("http://localhost:5000/todos", {
             name: todo,
         });
         getTodos();
@@ -65,13 +65,13 @@ function App() {
     //The deleteTodo function deletes a task from the server and updates the state of the application
     async function deleteTodo(todo) {
         const response = await axios.delete(
-            `http://joaopinto.zapto.org/todos/${todo.id}`
+            `http://localhost:5000/todos/${todo.id}`
         );
        getTodos();
     }
     //The modifyStatusTodo function updates the status of a task on the server and updates the state of the application.
     async function modifyStatusTodo(todo) {
-        const response = await axios.put(`http://joaopinto.zapto.org/todos/${todo.id}`, {
+        const response = await axios.put(`http://localhost:5000/todos/${todo.id}`, {
             id: todo.id,
             name: todo.name,
             status: !todo.status,
@@ -80,7 +80,7 @@ function App() {
     }
     //The editTodo function updates the name of the selected task on the server and updates the state of the application
     async function editTodo(task) {
-        const response = await axios.put(`http://joaopinto.zapto.org/todos/${task.id}`, {
+        const response = await axios.put(`http://localhost:5000/todos/${task.id}`, {
             id: task.id,
             status: task.status,
             name: task.name,
