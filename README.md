@@ -22,16 +22,26 @@
 
 __This project is being host in a raspberry pi 4. You can acess the website in this link :__[🕸️](http://joaopinto.zapto.org)
 
-### Used scripts 
+### Used scripts
+1. create a default react app (client folder)
 ```bash
 npx create-react-app client
 ```
+2. check the database status and info via Prisma (server folder)
 ```bash
 npx prisma studio
 ```
+### Pre-requirements 
+1. install all depencies (both folders)
+```bash
+npm install
+```
+### Run the app
+1. On the server folder start the backend
 ```bash
 npm run start
 ```
+2. On the client folder start the frontend
 ```bash
-npm run dev
+npm run start
 ```
