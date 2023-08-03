@@ -1,4 +1,6 @@
 # todo_fullstackapp
+### Demo
+![ezgif com-crop (1)](https://github.com/joaopinto15/todo_fullstackapp/assets/86107009/8f614f41-3010-4da1-8868-12d55e7fff07)
 
 ### Description
 
