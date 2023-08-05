@@ -18,7 +18,7 @@
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original-wordmark.svg" height='40'/>](https://reactjs.org/)
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" height='40'/>](https://nodejs.org/en/)
 [<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/sqlite/sqlite-original.svg" height='40' />](https://www.sqlite.org/index.html)
-                              
+[<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nginx/nginx-original.svg" height='40' />](https://www.nginx.com/)                              
 
 ### Website
 
@@ -47,3 +47,8 @@ npm run start
 ```bash
 npm run start
 ```
+
+### Management
+
+-> to manage all the services I used: [prisma](https://www.prisma.io/) to control the database, [pm2](https://pm2.keymetrics.io/) to manage all javascript code and [nginx](https://www.nginx.com/) to manage the server.
+
